@@ -174,6 +174,28 @@ func TestDeploymentPodAnnotations(t *testing.T) {
 	assert.Subset(t, ds.Spec.Template.Annotations, testPodAnnotationValues)
 }
 
+func TestDeploymentAnnotations(t *testing.T) {
+	// prepare
+	testAnnotationValues := map[string]string{"annotation-key": "annotation-value"}
+	otelcol := collectorInstance()
+	otelcol.Annotations = testAnnotationValues
+	cfg := config.New()
+
+	params := manifests.Params{
+		OtelCol: otelcol,
+		Config:  cfg,
+		Log:     logger,
+	}
+
+	// test
+	ds, err := Deployment(params)
+	assert.NoError(t, err)
+
+	// verify
+	assert.Equal(t, "my-instance-targetallocator", ds.Name)
+	assert.Subset(t, ds.Annotations, testAnnotationValues)
+}
+
 func collectorInstance() v1alpha1.OpenTelemetryCollector {
 	configYAML, err := os.ReadFile("testdata/test.yaml")
 	if err != nil {

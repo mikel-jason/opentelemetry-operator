@@ -27,12 +27,22 @@ import (
 	"github.com/open-telemetry/opentelemetry-operator/internal/manifests"
 )
 
+func TestAnnotations(t *testing.T) {
+	instance := collectorInstance()
+	instance.Annotations = map[string]string{
+		"key": "value",
+	}
+	annotations, err := Annotations(instance)
+	assert.NoError(t, err)
+	assert.Subset(t, annotations, instance.Spec.PodAnnotations)
+}
+
 func TestPodAnnotations(t *testing.T) {
 	instance := collectorInstance()
 	instance.Spec.PodAnnotations = map[string]string{
 		"key": "value",
 	}
-	annotations := Annotations(instance, nil)
+	annotations := PodAnnotations(instance, nil)
 	assert.Subset(t, annotations, instance.Spec.PodAnnotations)
 }
 
@@ -49,7 +59,7 @@ func TestConfigMapHash(t *testing.T) {
 	expectedConfig := expectedConfigMap.Data[targetAllocatorFilename]
 	require.NotEmpty(t, expectedConfig)
 	expectedHash := sha256.Sum256([]byte(expectedConfig))
-	annotations := Annotations(instance, expectedConfigMap)
+	annotations := PodAnnotations(instance, expectedConfigMap)
 	require.Contains(t, annotations, configMapHashAnnotationKey)
 	cmHash := annotations[configMapHashAnnotationKey]
 	assert.Equal(t, fmt.Sprintf("%x", expectedHash), cmHash)
@@ -58,6 +68,6 @@ func TestConfigMapHash(t *testing.T) {
 func TestInvalidConfigNoHash(t *testing.T) {
 	instance := collectorInstance()
 	instance.Spec.Config = ""
-	annotations := Annotations(instance, nil)
+	annotations := PodAnnotations(instance, nil)
 	require.NotContains(t, annotations, configMapHashAnnotationKey)
 }

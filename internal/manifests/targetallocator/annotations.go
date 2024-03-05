@@ -25,8 +25,22 @@ import (
 
 const configMapHashAnnotationKey = "opentelemetry-targetallocator-config/hash"
 
-// Annotations returns the annotations for the TargetAllocator Pod.
-func Annotations(instance v1alpha1.OpenTelemetryCollector, configMap *v1.ConfigMap) map[string]string {
+// Annotations return the annotations for TargetAllocator Deployment.
+func Annotations(instance v1alpha1.OpenTelemetryCollector) (map[string]string, error) {
+	// new map every time, so that we don't touch the instance's annotations
+	annotations := map[string]string{}
+
+	if nil != instance.Annotations {
+		for k, v := range instance.Annotations {
+			annotations[k] = v
+		}
+	}
+
+	return annotations, nil
+}
+
+// PodAnnotations returns the annotations for the TargetAllocator Pod.
+func PodAnnotations(instance v1alpha1.OpenTelemetryCollector, configMap *v1.ConfigMap) map[string]string {
 	// Make a copy of PodAnnotations to be safe
 	annotations := make(map[string]string, len(instance.Spec.PodAnnotations))
 	for key, value := range instance.Spec.PodAnnotations {
