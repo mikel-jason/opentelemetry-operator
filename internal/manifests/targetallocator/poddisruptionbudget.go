@@ -43,7 +43,7 @@ func PodDisruptionBudget(params manifests.Params) (*policyV1.PodDisruptionBudget
 	name := naming.TAPodDisruptionBudget(params.OtelCol.Name)
 	labels := Labels(params.OtelCol, name)
 
-	annotations := Annotations(params.OtelCol, nil)
+	annotations := PodAnnotations(params.OtelCol, nil)
 
 	objectMeta := metav1.ObjectMeta{
 		Name:        name,

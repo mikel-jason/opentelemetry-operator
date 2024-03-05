@@ -33,13 +33,19 @@ func Deployment(params manifests.Params) (*appsv1.Deployment, error) {
 		params.Log.Info("failed to construct target allocator config map for annotations")
 		configMap = nil
 	}
-	annotations := Annotations(params.OtelCol, configMap)
+	annotations, err := Annotations(params.OtelCol)
+	if err != nil {
+		params.Log.Info("failed to construct target allocator config map for annotations")
+		annotations = nil
+	}
+	podAnnotations := PodAnnotations(params.OtelCol, configMap)
 
 	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: params.OtelCol.Namespace,
-			Labels:    labels,
+			Name:        name,
+			Namespace:   params.OtelCol.Namespace,
+			Labels:      labels,
+			Annotations: annotations,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: params.OtelCol.Spec.TargetAllocator.Replicas,
@@ -49,7 +55,7 @@ func Deployment(params manifests.Params) (*appsv1.Deployment, error) {
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      labels,
-					Annotations: annotations,
+					Annotations: podAnnotations,
 				},
 				Spec: corev1.PodSpec{
 					ServiceAccountName:        ServiceAccountName(params.OtelCol),
