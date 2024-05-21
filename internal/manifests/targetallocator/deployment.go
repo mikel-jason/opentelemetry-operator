@@ -47,6 +47,7 @@ func Deployment(params manifests.Params) (*appsv1.Deployment, error) {
 			Selector: &metav1.LabelSelector{
 				MatchLabels: manifestutils.TASelectorLabels(params.TargetAllocator, ComponentOpenTelemetryTargetAllocator),
 			},
+			Strategy: params.TargetAllocator.Spec.UpdateStrategy,
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      labels,

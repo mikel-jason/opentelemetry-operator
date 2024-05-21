@@ -21,8 +21,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	go_yaml "gopkg.in/yaml.v3"
+	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 
 	"github.com/open-telemetry/opentelemetry-operator/apis/v1beta1"
 	"github.com/open-telemetry/opentelemetry-operator/internal/config"
@@ -257,6 +259,38 @@ func TestDeploymentNodeSelector(t *testing.T) {
 	d2, err := Deployment(params2)
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]string{"node-key": "node-value"}, d2.Spec.Template.Spec.NodeSelector)
+}
+
+func TestDeploymentUpdateStrategy(t *testing.T) {
+	// prepare
+	otelcol := collectorInstance()
+	targetAllocator := targetAllocatorInstance()
+	maxUnavailable := intstr.FromInt(2)
+	maxSurge := intstr.FromInt(3)
+	targetAllocator.Spec.UpdateStrategy = appsv1.DeploymentStrategy{
+		Type: appsv1.RollingUpdateDeploymentStrategyType,
+		RollingUpdate: &appsv1.RollingUpdateDeployment{
+			MaxUnavailable: &maxUnavailable,
+			MaxSurge:       &maxSurge,
+		},
+	}
+	cfg := config.New()
+
+	params := manifests.Params{
+		OtelCol:         otelcol,
+		TargetAllocator: targetAllocator,
+		Config:          cfg,
+		Log:             logger,
+	}
+
+	// test
+	ds, err := Deployment(params)
+	assert.NoError(t, err)
+
+	// verify
+	assert.Equal(t, appsv1.RollingUpdateDeploymentStrategyType, ds.Spec.Strategy.Type)
+	assert.Equal(t, maxUnavailable.IntVal, ds.Spec.Strategy.RollingUpdate.MaxUnavailable.IntVal)
+	assert.Equal(t, maxSurge.IntVal, ds.Spec.Strategy.RollingUpdate.MaxSurge.IntVal)
 }
 
 func TestDeploymentAffinity(t *testing.T) {
