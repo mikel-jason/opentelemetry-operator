@@ -834,6 +834,7 @@ func (in *TargetAllocatorSpec) DeepCopyInto(out *TargetAllocatorSpec) {
 	*out = *in
 	in.OpenTelemetryCommonFields.DeepCopyInto(&out.OpenTelemetryCommonFields)
 	in.CollectorSelector.DeepCopyInto(&out.CollectorSelector)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.ScrapeConfigs != nil {
 		in, out := &in.ScrapeConfigs, &out.ScrapeConfigs
 		*out = make([]AnyConfig, len(*in))
