@@ -69,6 +69,7 @@ func TargetAllocator(params manifests.Params) (*v1beta1.TargetAllocator, error) 
 			},
 			CollectorSelector:  collectorSelector,
 			AllocationStrategy: taSpec.AllocationStrategy,
+			UpdateStrategy:     taSpec.UpdateStrategy,
 			FilterStrategy:     taSpec.FilterStrategy,
 			ScrapeConfigs:      scrapeConfigs,
 			PrometheusCR:       taSpec.PrometheusCR,

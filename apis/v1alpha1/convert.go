@@ -171,6 +171,7 @@ func tov1beta1TA(in OpenTelemetryTargetAllocator) v1beta1.TargetAllocatorEmbedde
 		NodeSelector:       in.NodeSelector,
 		Resources:          in.Resources,
 		AllocationStrategy: tov1beta1TAAllocationStrategy(in.AllocationStrategy),
+		UpdateStrategy:     in.UpdateStrategy,
 		FilterStrategy:     tov1beta1TAFilterStrategy(in.FilterStrategy),
 		ServiceAccount:     in.ServiceAccount,
 		Image:              in.Image,

@@ -152,6 +152,10 @@ type TargetAllocatorEmbedded struct {
 	// +optional
 	// +kubebuilder:default:=consistent-hashing
 	AllocationStrategy TargetAllocatorAllocationStrategy `json:"allocationStrategy,omitempty"`
+	// UpdateStrategy represents the strategy the operator will take replacing existing Deployment pods with new pods
+	// https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec
+	// +optional
+	UpdateStrategy appsv1.DeploymentStrategy `json:"deploymentUpdateStrategy,omitempty"`
 	// FilterStrategy determines how to filter targets before allocating them among the collectors.
 	// The only current option is relabel-config (drops targets based on prom relabel_config).
 	// The default is relabel-config.

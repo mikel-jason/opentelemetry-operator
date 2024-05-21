@@ -712,6 +712,7 @@ func (in *TargetAllocatorEmbedded) DeepCopyInto(out *TargetAllocatorEmbedded) {
 		}
 	}
 	in.Resources.DeepCopyInto(&out.Resources)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.Affinity != nil {
 		in, out := &in.Affinity, &out.Affinity
 		*out = new(v1.Affinity)
