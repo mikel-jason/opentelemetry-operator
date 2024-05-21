@@ -2839,24 +2839,6 @@ spec:
                     - consistent-hashing
                     - per-node
                     type: string
-                  deploymentUpdateStrategy:
-                    properties:
-                      rollingUpdate:
-                        properties:
-                          maxSurge:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            x-kubernetes-int-or-string: true
-                          maxUnavailable:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            x-kubernetes-int-or-string: true
-                        type: object
-                      type:
-                        type: string
-                    type: object
                   enabled:
                     type: boolean
                   env:
@@ -3201,6 +3183,24 @@ spec:
                       - whenUnsatisfiable
                       type: object
                     type: array
+                  updateStrategy:
+                    properties:
+                      rollingUpdate:
+                        properties:
+                          maxSurge:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                          maxUnavailable:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                        type: object
+                      type:
+                        type: string
+                    type: object
                 type: object
               terminationGracePeriodSeconds:
                 format: int64
@@ -7192,24 +7192,6 @@ spec:
                     - consistent-hashing
                     - per-node
                     type: string
-                  deploymentUpdateStrategy:
-                    properties:
-                      rollingUpdate:
-                        properties:
-                          maxSurge:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            x-kubernetes-int-or-string: true
-                          maxUnavailable:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            x-kubernetes-int-or-string: true
-                        type: object
-                      type:
-                        type: string
-                    type: object
                   enabled:
                     type: boolean
                   env:
@@ -7597,6 +7579,24 @@ spec:
                       - whenUnsatisfiable
                       type: object
                     type: array
+                  updateStrategy:
+                    properties:
+                      rollingUpdate:
+                        properties:
+                          maxSurge:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                          maxUnavailable:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                        type: object
+                      type:
+                        type: string
+                    type: object
                 type: object
               terminationGracePeriodSeconds:
                 format: int64
