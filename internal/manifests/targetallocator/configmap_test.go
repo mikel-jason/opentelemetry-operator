@@ -58,9 +58,6 @@ config:
       - 0.0.0.0:8888
       - 0.0.0.0:9999
 filter_strategy: relabel-config
-prometheus_cr:
-  pod_monitor_selector: null
-  service_monitor_selector: null
 `,
 		}
 		collector := collectorInstance()
@@ -94,9 +91,6 @@ collector_selector:
     app.kubernetes.io/part-of: opentelemetry
   matchexpressions: []
 filter_strategy: relabel-config
-prometheus_cr:
-  pod_monitor_selector: null
-  service_monitor_selector: null
 `,
 		}
 		collector := collectorInstance()
@@ -197,9 +191,7 @@ config:
       - 0.0.0.0:9999
 filter_strategy: relabel-config
 prometheus_cr:
-  pod_monitor_selector: null
   scrape_interval: 30s
-  service_monitor_selector: null
 `,
 		}
 

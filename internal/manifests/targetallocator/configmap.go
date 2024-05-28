@@ -57,9 +57,13 @@ func ConfigMap(params manifests.Params) (*corev1.ConfigMap, error) {
 		prometheusCRConfig["scrape_interval"] = taSpec.PrometheusCR.ScrapeInterval.Duration
 	}
 
-	prometheusCRConfig["service_monitor_selector"] = taSpec.PrometheusCR.ServiceMonitorSelector
+	if taSpec.PrometheusCR.ServiceMonitorSelector != nil {
+		prometheusCRConfig["service_monitor_selector"] = taSpec.PrometheusCR.ServiceMonitorSelector
+	}
 
-	prometheusCRConfig["pod_monitor_selector"] = taSpec.PrometheusCR.PodMonitorSelector
+	if taSpec.PrometheusCR.PodMonitorSelector != nil {
+		prometheusCRConfig["pod_monitor_selector"] = taSpec.PrometheusCR.PodMonitorSelector
+	}
 
 	if len(prometheusCRConfig) > 0 {
 		taConfig["prometheus_cr"] = prometheusCRConfig
